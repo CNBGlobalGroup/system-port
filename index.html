@@ -9,6 +9,9 @@
 <meta name="apple-mobile-web-app-title" content="System Port">
 <meta name="application-name" content="System Port">
 <meta name="theme-color" content="#08080A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
@@ -61,6 +64,10 @@ ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 5
 .splash .spinner { width: 22px; height: 22px; margin: 22px auto 0; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--gold); animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 [hidden] { display: none !important; }
+/* App mode: the dashboard fills the screen below the status bar */
+body.app { display: block; padding: 0; overflow: hidden; height: 100vh; height: 100dvh; background: var(--bg); }
+body.app .wrap { position: fixed; inset: 0; display: grid; place-content: center; max-width: none; }
+#frame { position: fixed; left: 0; right: 0; bottom: 0; top: env(safe-area-inset-top, 0px); width: 100%; height: calc(100% - env(safe-area-inset-top, 0px)); border: 0; background: transparent; z-index: 2; }
 @media (prefers-reduced-motion: reduce) { .splash .spinner { animation: none; } }
 </style>
 </head>
@@ -123,11 +130,18 @@ ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 5
   var target = BASE + id + '/exec';
 
   if (fromIcon) {
+    // Opened from the icon: show the dashboard inside this page, full screen (no Safari bars).
+    document.body.classList.add('app');
     show('launch');
     var a = document.getElementById('launchLink');
     a.href = target;
-    setTimeout(function () { a.hidden = false; }, 2500);   // fallback if the redirect is held up
-    location.replace(target);
+    setTimeout(function () { a.hidden = false; }, 6000);   // fallback link behind the frame
+    var f = document.createElement('iframe');
+    f.id = 'frame';
+    f.title = 'System Port dashboard';
+    f.src = target;
+    f.allow = 'clipboard-write';
+    document.body.appendChild(f);
     return;
   }
 
