@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>System Port</title>
+<meta name="apple-mobile-web-app-title" content="System Port">
+<meta name="application-name" content="System Port">
+<meta name="theme-color" content="#08080A">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Home-screen launcher for the System Port dashboard.
+   The dashboard link is never stored in this file: it travels after "#" in the URL,
+   which browsers keep on the device and never send to the server. */
+:root {
+  --bg: #08080A; --card: #121214; --card-2: #18181B; --ink: #F2EDE3; --muted: #A39D90; --subtle: #8A8478;
+  --line: #24221E; --rule: rgba(201,168,92,.22); --gold: #C9A85C; --gold-hi: #EBD08F; --gold-lo: #8C6E33;
+  --display: 'Cinzel', 'Times New Roman', serif; --num: 'Inter', system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  background: radial-gradient(900px 460px at 100% -10%, rgba(201,168,92,.10), transparent 60%), var(--bg);
+  color: var(--ink); font: 14px/1.5 var(--num);
+}
+.wrap { width: 100%; max-width: 420px; text-align: center; }
+.icon { width: 96px; height: 96px; border-radius: 22px; display: block; margin: 0 auto; box-shadow: 0 18px 40px rgba(0,0,0,.6), 0 0 0 1px var(--rule); }
+.eyebrow { margin-top: 22px; font: 600 10px/1 var(--display); letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+h1 { margin: 10px 0 0; font: 700 22px/1.2 var(--display); letter-spacing: .1em; text-transform: uppercase; }
+.lead { margin: 10px auto 0; color: var(--muted); max-width: 320px; }
+.card {
+  margin-top: 26px; text-align: left; border-radius: 12px; padding: 18px;
+  background: linear-gradient(180deg, var(--card-2), var(--card)); border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 16px 36px rgba(0,0,0,.42);
+}
+.card h2 { margin: 0 0 12px; font: 600 10px/1 var(--display); letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+ol { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+ol li { counter-increment: s; display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 9px 0; border-top: 1px solid var(--line); }
+ol li:first-child { border-top: 0; padding-top: 0; }
+ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 11px var(--num); color: var(--gold-hi); border: 1px solid var(--gold-lo); }
+.k { color: var(--gold-hi); font-weight: 600; white-space: nowrap; }
+.share { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; }
+.btn {
+  margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  padding: 14px 16px; border-radius: 8px; border: 1px solid var(--gold); text-decoration: none;
+  background: linear-gradient(180deg, rgba(201,168,92,.22), rgba(201,168,92,.08)); color: var(--gold-hi);
+  font: 600 12px var(--num); letter-spacing: .14em; text-transform: uppercase;
+}
+.btn:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.note { margin-top: 14px; font-size: 12px; color: var(--subtle); }
+.splash .spinner { width: 22px; height: 22px; margin: 22px auto 0; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--gold); animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .splash .spinner { animation: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <img class="icon" src="icon-512.png" alt="" width="96" height="96">
+
+  <!-- Opened from the home-screen icon: go straight to the dashboard -->
+  <section id="launch" class="splash" hidden>
+    <div class="eyebrow">Private Wealth Command</div>
+    <h1>System Port</h1>
+    <p class="lead">Opening your dashboard…</p>
+    <div class="spinner" aria-hidden="true"></div>
+    <a id="launchLink" class="btn" href="#" hidden>Open Dashboard</a>
+  </section>
+
+  <!-- Opened from the shared link: show how to install the icon -->
+  <section id="setup" hidden>
+    <div class="eyebrow">Private Wealth Command</div>
+    <h1>System Port</h1>
+    <p class="lead">Add the dashboard to your Home Screen to open it like an app.</p>
+    <div class="card" id="ios">
+      <h2>iPhone · Safari</h2>
+      <ol>
+        <li><span>Tap <span class="k">Share <svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span> in Safari's toolbar.</span></li>
+        <li><span>Choose <span class="k">Add to Home Screen</span>.</span></li>
+        <li><span>Tap <span class="k">Add</span>. The gold Σ icon appears on your Home Screen.</span></li>
+      </ol>
+    </div>
+    <div class="card" id="android">
+      <h2>Android · Chrome</h2>
+      <ol>
+        <li><span>Tap the <span class="k">⋮</span> menu at the top right.</span></li>
+        <li><span>Choose <span class="k">Add to Home screen</span>, then <span class="k">Add</span>.</span></li>
+      </ol>
+    </div>
+    <a id="openLink" class="btn" href="#">Open Dashboard</a>
+    <p class="note">You'll need to be signed in to a Google account.</p>
+  </section>
+
+  <!-- Link without its access key -->
+  <section id="missing" hidden>
+    <div class="eyebrow">Private Wealth Command</div>
+    <h1>System Port</h1>
+    <p class="lead">This link is incomplete. Ask the owner to send you the full link.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var BASE = 'https://script.google.com/macros/s/';
+  var hash = location.hash.slice(1);
+  var fromIcon = hash.indexOf('go=') === 0;
+  var id = fromIcon ? hash.slice(3) : hash;
+  var valid = /^AKfyc[\w-]{20,}$/.test(id);
+  function show(sel) { document.getElementById(sel).hidden = false; }
+
+  if (!valid) { show('missing'); return; }
+  var target = BASE + id + '/exec';
+
+  if (fromIcon) {
+    show('launch');
+    var a = document.getElementById('launchLink');
+    a.href = target;
+    setTimeout(function () { a.hidden = false; }, 2500);   // fallback if the redirect is held up
+    location.replace(target);
+    return;
+  }
+
+  // Shared link: from now on this page's address is the "launch" address,
+  // so the icon saved with Add to Home Screen opens the dashboard directly.
+  try { history.replaceState(null, '', location.pathname + location.search + '#go=' + id); } catch (e) {}
+  document.getElementById('openLink').href = target;
+  var ua = navigator.userAgent;
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+  if (isIOS) document.getElementById('android').hidden = true;
+  if (isAndroid) document.getElementById('ios').hidden = true;
+  show('setup');
+})();
+</script>
+</body>
+</html>
