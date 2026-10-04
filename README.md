@@ -1,6 +1,6 @@
 # System Port
 
-Home-screen launcher for the System Port dashboard (gold Σ icon).
+Home-screen launcher for the System Port dashboard (CNB monogram icon).
 
 The dashboard link is **not** stored in this repository. It is passed after `#` in the
 shared URL, which browsers never send to the server:
