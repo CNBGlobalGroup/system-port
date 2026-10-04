@@ -136,8 +136,8 @@ ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 5
   try { history.replaceState(null, '', location.pathname + location.search + '#go=' + id); } catch (e) {}
   document.getElementById('openLink').href = target;
   var ua = navigator.userAgent;
-  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var isAndroid = /Android/.test(ua);
+  var isIOS = !isAndroid && (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
   if (isIOS) document.getElementById('android').hidden = true;
   if (isAndroid) document.getElementById('ios').hidden = true;
   show('setup');
