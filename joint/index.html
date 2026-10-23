@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>พอร์ตร่วม 51:49</title>
+<meta name="apple-mobile-web-app-title" content="พอร์ตร่วม">
+<meta name="application-name" content="พอร์ตร่วม">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Sarabun:wght@400;500;600;700&display=swap">
+<style>
+/* Home-screen launcher for the 51:49 joint-fund dashboard.
+   The dashboard link is never stored in this file: it travels after "#" in the URL,
+   which browsers keep on the device and never send to the server. */
+:root {
+  --bg: #0b0b0c; --card: #141316; --line: #24221e; --ink: #f4f1ea; --muted: #a29c90; --faint: #6f6a61;
+  --gold: #d4b06a; --gold-hi: #e9cd8a; --gold-lo: #8a7246;
+  --sans: 'Sarabun', system-ui, -apple-system, sans-serif; --num: 'Inter', 'Sarabun', system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  background: radial-gradient(900px 460px at 100% -10%, rgba(212,176,106,.10), transparent 60%), var(--bg);
+  color: var(--ink); font: 15px/1.55 var(--sans);
+}
+.wrap { width: 100%; max-width: 420px; text-align: center; }
+.icon { width: 96px; height: 96px; border-radius: 22px; display: block; margin: 0 auto; box-shadow: 0 18px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(212,176,106,.22); }
+.eyebrow { margin-top: 22px; font: 600 11px/1 var(--num); letter-spacing: .24em; color: var(--gold); }
+h1 { margin: 10px 0 0; font-size: 24px; font-weight: 700; line-height: 1.25; }
+.lead { margin: 8px auto 0; color: var(--muted); max-width: 320px; }
+.card { margin-top: 24px; text-align: left; border-radius: 14px; padding: 18px; background: var(--card); border: 1px solid var(--line); }
+.card h2 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--gold); }
+ol { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+ol li { counter-increment: s; display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 9px 0; border-top: 1px solid var(--line); }
+ol li:first-child { border-top: 0; padding-top: 0; }
+ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 600 11px var(--num); color: var(--gold-hi); border: 1px solid var(--gold-lo); margin-top: 1px; }
+.k { color: var(--gold-hi); font-weight: 600; white-space: nowrap; }
+.share { display: inline-block; width: 15px; height: 15px; vertical-align: -2px; }
+.btn {
+  margin-top: 18px; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 48px;
+  padding: 12px 16px; border-radius: 10px; border: 1px solid var(--gold); text-decoration: none;
+  background: linear-gradient(180deg, rgba(212,176,106,.22), rgba(212,176,106,.08)); color: var(--gold-hi);
+  font: 600 15px var(--sans);
+}
+.btn:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.note { margin-top: 14px; font-size: 13px; color: var(--faint); }
+.splash .spinner { width: 22px; height: 22px; margin: 22px auto 0; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--gold); animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+[hidden] { display: none !important; }
+/* App mode: the dashboard fills the screen below the status bar */
+body.app { display: block; padding: 0; overflow: hidden; height: 100vh; height: 100dvh; background: var(--bg); }
+body.app .wrap { position: fixed; inset: 0; display: grid; place-content: center; max-width: none; }
+/* The dashboard's bottom tab bar sits above the iPhone home indicator */
+#frame { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: env(safe-area-inset-bottom, 0px); width: 100%; height: calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border: 0; background: var(--bg); z-index: 2; }
+@media (prefers-reduced-motion: reduce) { .splash .spinner { animation: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <img class="icon" src="icon-512.png?v=1" alt="" width="96" height="96">
+
+  <!-- Opened from the home-screen icon: show the dashboard full screen -->
+  <section id="launch" class="splash" hidden>
+    <div class="eyebrow">JOINT FUND 51:49</div>
+    <h1>พอร์ตร่วม</h1>
+    <p class="lead">กำลังเปิด…</p>
+    <div class="spinner" aria-hidden="true"></div>
+    <a id="launchLink" class="btn" href="#" hidden>เปิดหน้าพอร์ต</a>
+  </section>
+
+  <!-- Opened from the shared link: show how to install the icon -->
+  <section id="setup" hidden>
+    <div class="eyebrow">JOINT FUND 51:49</div>
+    <h1>พอร์ตร่วม</h1>
+    <p class="lead">เพิ่มไว้ที่หน้าจอโฮม แล้วเปิดได้เหมือนแอป เต็มจอ</p>
+    <div class="card" id="ios">
+      <h2>iPhone · Safari</h2>
+      <ol>
+        <li><span>กดปุ่ม <span class="k">แชร์ <svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span> ใน Safari</span></li>
+        <li><span>เลือก <span class="k">เพิ่มไปยังหน้าจอโฮม</span> (Add to Home Screen)</span></li>
+        <li><span>กด <span class="k">เพิ่ม</span> จะได้ไอคอน 51:49 สีทองบนหน้าจอโฮม</span></li>
+      </ol>
+    </div>
+    <div class="card" id="android">
+      <h2>Android · Chrome</h2>
+      <ol>
+        <li><span>กดเมนู <span class="k">⋮</span> มุมขวาบน</span></li>
+        <li><span>เลือก <span class="k">เพิ่มลงในหน้าจอหลัก</span> แล้วกด <span class="k">เพิ่ม</span></span></li>
+      </ol>
+    </div>
+    <a id="openLink" class="btn" href="#">เปิดหน้าพอร์ตเลย</a>
+    <p class="note">ไม่ต้องล็อกอิน Google</p>
+  </section>
+
+  <!-- Link without its access key -->
+  <section id="missing" hidden>
+    <div class="eyebrow">JOINT FUND 51:49</div>
+    <h1>พอร์ตร่วม</h1>
+    <p class="lead">ลิงก์นี้ไม่ครบ ขอลิงก์เต็มจากพี่อีกครั้ง</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var BASE = 'https://script.google.com/macros/s/';
+  var hash = location.hash.slice(1);
+  var fromIcon = hash.indexOf('go=') === 0;
+  var id = fromIcon ? hash.slice(3) : hash;
+  var valid = /^AKfyc[\w-]{20,}$/.test(id);
+  function show(sel) { document.getElementById(sel).hidden = false; }
+
+  if (!valid) { show('missing'); return; }
+  var target = BASE + id + '/exec';
+
+  if (fromIcon) {
+    // Opened from the icon: show the dashboard inside this page, full screen (no Google banner, no Safari bars).
+    document.body.classList.add('app');
+    show('launch');
+    var a = document.getElementById('launchLink');
+    a.href = target;
+    setTimeout(function () { a.hidden = false; }, 6000);   // fallback link behind the frame
+    var f = document.createElement('iframe');
+    f.id = 'frame';
+    f.title = 'พอร์ตร่วม 51:49';
+    f.src = target;
+    document.body.appendChild(f);
+    return;
+  }
+
+  // Shared link: from now on this page's address is the "launch" address,
+  // so the icon saved with Add to Home Screen opens the dashboard directly.
+  try { history.replaceState(null, '', location.pathname + location.search + '#go=' + id); } catch (e) {}
+  document.getElementById('openLink').href = location.pathname + location.search + '#go=' + id;
+  document.getElementById('openLink').addEventListener('click', function () { setTimeout(function () { location.reload(); }, 0); });
+  var ua = navigator.userAgent;
+  var isAndroid = /Android/.test(ua);
+  var isIOS = !isAndroid && (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+  if (isIOS) document.getElementById('android').hidden = true;
+  if (isAndroid) document.getElementById('ios').hidden = true;
+  show('setup');
+})();
+</script>
+</body>
+</html>
