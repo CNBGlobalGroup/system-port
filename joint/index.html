@@ -63,8 +63,9 @@ ol li::before { content: counter(s); width: 22px; height: 22px; border-radius: 5
 /* App mode: the dashboard fills the screen below the status bar */
 body.app { display: block; padding: 0; overflow: hidden; height: 100vh; height: 100dvh; background: var(--bg); }
 body.app .wrap { position: fixed; inset: 0; display: grid; place-content: center; max-width: none; }
-/* The dashboard's bottom tab bar sits above the iPhone home indicator */
-#frame { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: env(safe-area-inset-bottom, 0px); width: 100%; height: calc(100% - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border: 0; background: var(--bg); z-index: 2; }
+/* The frame runs to the bottom edge; the dashboard pads its tab bar by the home-indicator height (sent as sb) */
+#frame { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: 0; width: 100%; height: calc(100% - env(safe-area-inset-top, 0px)); border: 0; background: var(--bg); z-index: 2; }
+#probe { position: fixed; left: 0; bottom: 0; width: 0; height: env(safe-area-inset-bottom, 0px); visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .splash .spinner { animation: none; } }
 </style>
 </head>
@@ -136,7 +137,9 @@ body.app .wrap { position: fixed; inset: 0; display: grid; place-content: center
     var f = document.createElement('iframe');
     f.id = 'frame';
     f.title = 'พอร์ตร่วม 51:49';
-    f.src = target;
+    var probe = document.createElement('div'); probe.id = 'probe'; document.body.appendChild(probe);
+    var sb = Math.round(probe.getBoundingClientRect().height) || 0;
+    f.src = target + '?embed=1&sb=' + Math.min(sb, 80);
     document.body.appendChild(f);
     return;
   }
