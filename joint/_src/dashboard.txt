@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="th" class="<?= embedded ? 'embedded' : '' ?>" style="--sb: <?= sb ?>px">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<title>พอร์ตร่วม 51:49</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Black & gold in Liquid Glass: warm ambient light behind frosted, edge-lit glass panels; the headline number and
+     chart sit directly on the page (no frame); clean Inter numerals for legibility. Three views behind a floating tab bar. */
+  :root {
+    --ink: #000000; --line: rgba(255,255,255,.09);
+    --text: #f6f2ea; --muted: #b5afa3; --faint: #7e786e;
+    --gold: #d4b06a; --gold-hi: #f0d79a; --gold-lo: #8a7246; --steel: #5c564b;
+    --up: #ead6a4; --down: #ec9a87;
+    --sans: "Sarabun", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --num: "Inter", "Sarabun", system-ui, sans-serif;
+    --mark: url("https://cnbglobalgroup.github.io/system-port/joint/cnb-mark.webp");
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--ink) !important; }
+  body { margin: 0; color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  /* warm light the glass refracts */
+  .ambient { display: none; }
+  button { font: inherit; color: inherit; }
+  .app { max-width: 30rem; margin-inline: auto; padding: max(20px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(104px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+  .num { font-family: var(--num); font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  .up { color: var(--up); } .down { color: var(--down); }
+
+  /* liquid glass on pure black: the gold-lit top edge and specular corner carry the glass */
+  .glass { position: relative; overflow: hidden; border-radius: 20px;
+    background: linear-gradient(150deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.03) 42%, rgba(255,255,255,.055) 100%);
+    -webkit-backdrop-filter: blur(24px) saturate(175%); backdrop-filter: blur(24px) saturate(175%);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: inset 0 1px 0.5px rgba(240,215,154,.34), inset 0 -1px 1px rgba(255,255,255,.06), inset 1px 0 0 rgba(255,255,255,.05), 0 18px 40px -16px rgba(0,0,0,.9); }
+  .glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(120% 70% at 0% 0%, rgba(255,255,255,.13), transparent 46%), radial-gradient(80% 50% at 100% 100%, rgba(240,215,154,.07), transparent 60%); }
+  .glass > * { position: relative; }
+  .pad { padding: 18px; }
+
+  /* header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 2px 22px; padding-bottom: 16px; border-bottom: 1px solid transparent; border-image: linear-gradient(90deg, rgba(212,176,106,.7), rgba(212,176,106,.08)) 1; }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .brand img { height: 36px; width: auto; display: block; filter: drop-shadow(0 4px 10px rgba(0,0,0,.6)); }
+  .brand .rule { width: 1px; height: 28px; background: rgba(255,255,255,.16); }
+  .brand b { display: block; font-size: 18px; font-weight: 700; line-height: 1.15; letter-spacing: .01em; }
+  .eyebrow { font: 600 10px/1 var(--num); letter-spacing: .22em; color: var(--gold); text-transform: uppercase; }
+  .asof { font-size: 12.5px; color: var(--muted); text-align: right; line-height: 1.35; }
+  .asof i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-right: 6px; vertical-align: 1px; box-shadow: 0 0 0 3px rgba(212,176,106,.18); }
+
+  .view { display: grid; gap: 26px; animation: fade .35s ease both; }
+  .view[hidden] { display: none; }
+  @keyframes fade { from { opacity: .001; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .view { animation: none; } }
+
+  .sec { display: grid; gap: 12px; }
+  .sec-h { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 0 2px; }
+  h2 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .005em; }
+  h2::before { content: ""; display: inline-block; width: 3px; height: 15px; margin-right: 10px; vertical-align: -1px; border-radius: 2px; background: linear-gradient(var(--gold-hi), var(--gold-lo)); }
+  .cap { font-size: 12.5px; color: var(--muted); }
+  .note { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin: 0 2px; }
+
+  /* hero: number and chart straight on the page */
+  .hero { position: relative; padding: 0 2px; }
+  .hero::after { content: ""; position: absolute; right: -40px; top: -22px; width: 240px; height: 190px; background: var(--mark) center / contain no-repeat; opacity: .07; pointer-events: none; }
+  .hero-l { display: flex; align-items: baseline; gap: 10px; font-size: 13.5px; color: var(--muted); }
+  .hero-l .eyebrow { font-size: 10.5px; }
+  .hero-v { font: 700 54px/1.02 var(--num); letter-spacing: -.035em; margin-top: 8px; font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, #fff6d8 0%, #f0d79a 38%, #d4b06a 70%, #a8843f 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 6px 22px rgba(212,176,106,.22)); }
+  .hero-v .cur { font-weight: 600; font-size: 30px; margin-right: 4px; vertical-align: 8px; letter-spacing: 0; }
+  .hero-v small { font-size: 26px; font-weight: 600; letter-spacing: -.01em; color: rgba(212,176,106,.55); -webkit-text-fill-color: rgba(212,176,106,.55); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { display: inline-flex; align-items: baseline; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 13px; color: var(--muted);
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+  .chip b { font: 600 13.5px var(--num); }
+
+  /* chart */
+  .chart { position: relative; min-height: 280px; touch-action: pan-y; margin: 12px -18px 0; }
+  .chart svg { display: block; overflow: visible; }
+  .tip { position: absolute; pointer-events: none; background: rgba(28,26,30,.82); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 7px 11px; font-size: 13px; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.55); z-index: 3; }
+  .tip .d { color: var(--muted); font-size: 12px; }
+  .chart-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 6px; }
+  .range { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
+  .range button { background: none; border: 0; color: var(--muted); font-size: 12.5px; font-weight: 500; padding: 0 12px; min-height: 30px; border-radius: 999px; cursor: pointer; }
+  .range button[aria-pressed="true"] { color: #17120a; font-weight: 600; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
+  .range button:focus-visible, .tab:focus-visible, .row:focus-visible, .seg button:focus-visible, .go:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* kpi tiles */
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tile { padding: 13px 13px; border-radius: 18px; display: grid; gap: 4px; min-width: 0; }
+  .tile .k { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .tile:first-child .v { color: var(--gold-hi); }
+  .tile .v { font: 700 20px var(--num); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.01em; }
+
+  /* holder cards */
+  .holders { display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 15px 16px 16px; width: 100%; text-align: left; cursor: pointer; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: 600 17px var(--num); color: var(--gold-hi);
+    background: radial-gradient(circle at 30% 25%, rgba(240,215,154,.26), rgba(212,176,106,.05) 70%); border: 1px solid rgba(240,215,154,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.25); }
+  .row .nm { font: 700 17px var(--num); line-height: 1.25; }
+  .row .nm span { font: 400 12.5px var(--sans); color: var(--muted); margin-left: 6px; }
+  .row .sub { font-size: 12.5px; color: var(--muted); margin-top: 1px; white-space: nowrap; }
+  .row .r { text-align: right; }
+  .row .val { font: 700 22px/1.15 var(--num); font-variant-numeric: tabular-nums; letter-spacing: -.015em; }
+  .row .g { font: 500 13px var(--num); margin-top: 4px; }
+  .share { grid-column: 1 / -1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.09); overflow: hidden; margin-top: 2px; }
+  .share > i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-lo), var(--gold-hi)); }
+
+  /* allocation */
+  .alloc { display: grid; gap: 16px; }
+  .al-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  .al-h .n { font-size: 14.5px; font-weight: 500; }
+  .al-h .p { font: 700 16px var(--num); }
+  .al-h .t { font: 400 12px var(--sans); color: var(--muted); margin-left: 6px; }
+  .track { position: relative; height: 8px; border-radius: 5px; background: rgba(255,255,255,.09); }
+  .track > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; }
+  .track > b { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--text); opacity: .8; }
+  .legend-t { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .legend-t b { width: 2px; height: 12px; background: var(--text); opacity: .8; border-radius: 1px; }
+  .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 7px; vertical-align: 1px; }
+
+  /* go cards */
+  .go { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 15px 16px; cursor: pointer; min-height: 70px; }
+  .go .ic { flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; border: 1px solid rgba(240,215,154,.35); background: rgba(212,176,106,.10); box-shadow: inset 0 1px 0 rgba(255,255,255,.2); }
+  .go b { display: block; font-size: 15.5px; font-weight: 600; }
+  .go span { font-size: 12.5px; color: var(--muted); }
+  .go .chev { margin-left: auto; color: var(--gold); font-size: 22px; line-height: 1; font-style: normal; }
+
+  /* mine */
+  .seg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 18px; }
+  .seg button { border: 0; background: none; border-radius: 14px; min-height: 44px; font: 600 16px var(--num); color: var(--muted); cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #17120a; box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 6px 16px -6px rgba(212,176,106,.6); }
+  .card { display: grid; gap: 4px; padding: 0 2px; }
+  .card .t { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; }
+  .card .t b { color: var(--gold); font-weight: 600; }
+  .card .chart { margin: 4px -18px 0; min-height: 230px; }
+  /* Three facts sized to their content: columns take what their label/number needs, spare width goes between them */
+  .mini3 { display: grid; grid-template-columns: auto auto auto; justify-content: space-between; padding: 14px 16px; }
+  .mini3 > div { display: flex; flex-direction: column; justify-content: space-between; gap: 2px; padding-left: 12px; border-left: 1px solid var(--line); }
+  .mini3 > div:first-child { padding-left: 0; border-left: 0; }
+  .mini3 .k { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .mini3 .v { font: 700 16.5px var(--num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @media (max-width: 350px) { .mini3 { padding: 12px; } .mini3 > div { padding-left: 8px; } .mini3 .v { font-size: 14px; } .mini3 .k { font-size: 11.5px; } .tile .v { font-size: 15px; } }
+  .info { display: flex; gap: 14px; align-items: flex-start; padding: 15px 16px; }
+  .info .ic { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(240,215,154,.4); background: rgba(212,176,106,.10); box-shadow: inset 0 1px 0 rgba(255,255,255,.2); }
+  .info b { display: block; font-size: 15px; font-weight: 600; line-height: 1.4; }
+  .info span { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .kv { display: grid; padding: 4px 16px; }
+  .kv > div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+  .kv > div:last-child { border-bottom: 0; }
+  .kv > div > span:first-child { color: var(--muted); flex: 1 1 auto; min-width: 0; }
+  .kv > div > span:last-child { text-align: right; flex: 0 1 auto; }
+  .kv > div > span.num:last-child { flex: none; white-space: nowrap; font-weight: 500; }
+  .kv .em { color: var(--gold-hi); font-weight: 600 !important; }
+  .pill { display: inline-block; font-size: 12px; padding: 3px 11px; border-radius: 999px; border: 1px solid currentColor; }
+  .txl { padding: 2px 16px; }
+  .txl > div { display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .txl > div:last-child { border-bottom: 0; }
+  .txl .a { font-size: 15px; } .txl .a.num { font-weight: 600; } .txl .b { font-size: 12.5px; color: var(--muted); }
+  .txl .r { text-align: right; }
+  .txl .note { padding: 12px 0; }
+
+  /* report */
+  .mast { padding: 20px 18px; display: grid; gap: 4px; }
+  .mast::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .mast img { height: 34px; width: auto; margin-bottom: 10px; }
+  .mast .h { font-size: 24px; font-weight: 700; line-height: 1.25; }
+  .perf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .perf > div { padding: 14px 0 14px 14px; border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; gap: 3px; }
+  .perf > div:nth-child(3n+1) { padding-left: 16px; border-left: 0; }
+  .perf > div:nth-last-child(-n+3) { border-bottom: 0; }
+  .perf .k { font-size: 12.5px; color: var(--muted); }
+  .perf .v { font: 700 19px var(--num); font-variant-numeric: tabular-nums; }
+  .tblw { padding: 4px 16px; overflow-x: auto; }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tbl th { font-weight: 400; font-size: 12px; color: var(--muted); text-align: right; padding: 10px 0 8px 8px; border-bottom: 1px solid rgba(255,255,255,.14); white-space: nowrap; }
+  .tbl td { text-align: right; padding: 11px 0 11px 8px; border-bottom: 1px solid var(--line); font: 500 13.5px var(--num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tbl th:first-child, .tbl td:first-child { text-align: left; padding-left: 0; font-family: var(--sans); font-size: 14px; }
+  .tbl tbody tr:last-child td { border-bottom: 0; }
+  .tbl tfoot td { border-top: 1px solid rgba(255,255,255,.14); border-bottom: 0; color: var(--gold-hi); font-weight: 600; }
+  .foot { font-size: 12px; color: var(--faint); text-align: center; line-height: 1.7; margin: 4px 0 0; }
+
+  /* floating glass tab bar */
+  .tabbar { position: fixed; z-index: 10; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: 26rem;
+    bottom: max(12px, calc(env(safe-area-inset-bottom, 0px) - 6px)); border-radius: 30px; padding: 5px;
+    background: linear-gradient(150deg, rgba(48,45,50,.86), rgba(22,21,24,.92)); -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%); }
+  .tabbar .in { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .tab { position: relative; background: none; border: 0; border-radius: 25px; display: grid; justify-items: center; gap: 2px; padding: 7px 0 6px; min-height: 52px; color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; transition: background .2s, color .2s; }
+  .tab[aria-current="page"] { color: var(--gold-hi); background: rgba(212,176,106,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(240,215,154,.22); }
+  /* Opened from the home-screen icon (inside the launcher frame): the launcher passes the real
+     bottom safe-area as --sb, because env() inside a frame is unreliable on iPhone */
+  .embedded .app { padding: 18px 18px calc(96px + var(--sb, 0px)); }
+  .embedded .tabbar { bottom: max(12px, calc(var(--sb, 0px) - 6px)); }
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <img src="https://cnbglobalgroup.github.io/system-port/joint/cnb-mark.webp" alt="CNB" width="38" height="30">
+      <span class="rule" aria-hidden="true"></span>
+      <div><div class="eyebrow">Joint Fund · 51:49</div><b>พอร์ตร่วม</b></div>
+    </div>
+    <div class="asof" id="asof"></div>
+  </header>
+
+  <main>
+  <!-- ภาพรวม -->
+  <section class="view" id="v-home" aria-label="ภาพรวม">
+    <div class="hero">
+      <div class="hero-l"><span class="eyebrow">Net Asset Value</span>มูลค่าพอร์ตรวม</div>
+      <div class="hero-v" id="h-total">—</div>
+      <div class="chips" id="h-chg"></div>
+      <div class="chart" id="c-nav"></div>
+      <div class="chart-foot">
+        <span class="cap" id="c-nav-cap">เส้นประ = HWM</span>
+        <div class="range" role="group" aria-label="ช่วงเวลา">
+          <button type="button" data-days="30" aria-pressed="false">1M</button>
+          <button type="button" data-days="90" aria-pressed="false">3M</button>
+          <button type="button" data-days="0" aria-pressed="true">ทั้งหมด</button>
+        </div>
+      </div>
+    </div>
+    <div class="tiles">
+      <div class="glass tile"><span class="k">NAV / หน่วย</span><span class="v" id="k-nav">—</span></div>
+      <div class="glass tile"><span class="k">หน่วยทั้งหมด</span><span class="v" id="k-units">—</span></div>
+      <div class="glass tile"><span class="k">HWM</span><span class="v" id="k-hwm">—</span></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>ส่วนของแต่ละคน</h2><span class="cap">แตะเพื่อดูรายละเอียด</span></div>
+      <div class="holders" id="h-holders"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>สัดส่วนสินทรัพย์</h2><span class="legend-t"><b></b>เป้าหมาย</span></div>
+      <div class="glass pad alloc" id="a-list"></div>
+      <p class="note">ช่วงเปลี่ยนผ่านถึง 15 ต.ค. 2571 ไม่ขายบิตคอยน์ เงินใหม่เติมกระเป๋าที่ยังขาด</p>
+    </div>
+    <div class="sec" style="gap:10px">
+      <button type="button" class="glass go" data-goto="mine">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>
+        <div><b>ของฉัน</b><span>งบถอน ค่าบริหาร ประวัติรายการ</span></div><i class="chev" aria-hidden="true">›</i></button>
+      <button type="button" class="glass go" data-goto="report">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5M9 13h7M9 17h7"></path></svg></span>
+        <div><b>รายงานกองทุน</b><span>ผลตอบแทนตามช่วงเวลา ข้อมูลกองทุน สรุปรายปี</span></div><i class="chev" aria-hidden="true">›</i></button>
+    </div>
+  </section>
+
+  <!-- ของฉัน -->
+  <section class="view" id="v-mine" aria-label="ของฉัน" hidden>
+    <div class="glass seg" role="group" aria-label="ดูในมุมของ">
+      <button type="button" data-who="พี่" aria-pressed="false" aria-label="พี่ (C)">C</button>
+      <button type="button" data-who="น้อง" aria-pressed="true" aria-label="น้อง (N)">N</button>
+    </div>
+    <div class="card">
+      <div class="t"><b>มูลค่าของ <span id="m-who1">N</span> รายวัน</b><span class="muted" id="m-range"></span></div>
+      <div class="chart" id="c-mine"></div>
+    </div>
+    <div class="glass mini3">
+        <div><span class="k">เงินใส่สุทธิ</span><span class="v" id="m-in">—</span></div>
+        <div><span class="k">หน่วยกองกลาง</span><span class="v" id="m-core">—</span></div>
+        <div><span class="k">หน่วยส่วนเกิน</span><span class="v" id="m-exc">—</span></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>สิ่งที่ <span id="m-who2">N</span> ควรรู้</h2></div>
+      <div class="glass info">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></span>
+        <div><b id="m-win">—</b><span id="m-win-sub"></span></div>
+      </div>
+      <div class="glass info">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9 15l6-6M9.5 9.5h.01M14.5 14.5h.01"></path></svg></span>
+        <div><b id="m-fee">—</b><span id="m-fee-sub"></span></div>
+      </div>
+      <div class="glass info">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M7 8h7a3 3 0 0 1 0 6H8"></path></svg></span>
+        <div><b id="m-div">—</b><span>คิดจริงจาก NAV วันที่ 31 ธ.ค. ถ้าไม่ขอรับเป็นเงิน จะลงทุนต่อในพอร์ต</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>งบถอนปีนี้</h2><span class="pill" id="m-hold"></span></div>
+      <div class="glass kv" id="m-budget"></div>
+      <p class="note">ถอนเกินงบคิดค่าปรับ 3% เป็นการโอนหน่วยให้อีกฝ่าย · ถอนฉุกเฉินไม่คิดค่าปรับ แต่ส่วนที่เกินงบยกไปหักงบปีถัดไป</p>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>ประวัติรายการของ <span id="m-who3">N</span></h2></div>
+      <div class="glass txl" id="m-tx"></div>
+    </div>
+  </section>
+
+  <!-- รายงานกองทุน -->
+  <section class="view" id="v-report" aria-label="รายงานกองทุน" hidden>
+    <div class="glass mast">
+      <img src="https://cnbglobalgroup.github.io/system-port/joint/cnb-mark.webp" alt="CNB" width="43" height="34">
+      <div class="eyebrow">Joint Fund 51:49 · Fund Report</div>
+      <div class="h">รายงานสถานะกองทุน</div>
+      <div class="cap" id="r-asof"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>ผลการดำเนินงาน</h2></div>
+      <div class="glass perf" id="r-perf"></div>
+      <div class="glass kv" id="r-risk"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>ข้อมูลกองทุน</h2></div>
+      <div class="glass kv" id="r-facts"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>สัดส่วนการลงทุน</h2></div>
+      <div class="glass tblw"><table class="tbl" id="r-alloc"></table></div>
+      <p class="note">ยอดที่ต้องเติม = เงินใหม่ที่ต้องใส่ให้ทุกกระเป๋าถึงเป้าโดยไม่ขาย</p>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>ผู้ถือหน่วยลงทุน</h2></div>
+      <div class="glass tblw"><table class="tbl" id="r-hold"></table></div>
+    </div>
+    <div class="sec">
+      <div class="sec-h"><h2>สรุปรายปี</h2></div>
+      <div id="r-annual"></div>
+    </div>
+    <p class="foot">ผลการดำเนินงานในอดีตไม่ได้ยืนยันผลในอนาคต · หน้านี้แสดงข้อมูลเท่านั้น ไม่ใช่คำแนะนำการลงทุน</p>
+  </section>
+  </main>
+</div>
+
+<nav class="glass tabbar" aria-label="เมนูหลัก">
+  <div class="in">
+    <button type="button" class="tab" data-view="home" aria-current="page">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>ภาพรวม</button>
+    <button type="button" class="tab" data-view="mine">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>ของฉัน</button>
+    <button type="button" class="tab" data-view="report">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5M9 13h7M9 17h7"></path></svg>รายงานกองทุน</button>
+  </div>
+</nav>
+
+<script>window.DATA = <?!= data ?>;</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(function () {
+  var D = window.DATA || {};
+  var TH_M = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+  var GOLD = '#d4b06a', GOLD_HI = '#f0d79a', GOLD_LO = '#8a7246', STEEL = '#5c564b', MUTED = '#a39d91', HWMC = '#5a554c';
+  var SW = [GOLD, GOLD_LO, STEEL];
+  var NM = { 'พี่': 'C', 'น้อง': 'N' };
+  function nm(w) { return NM[w] || w; }
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function parse(s) { return new Date(String(s).slice(0, 10) + 'T00:00:00Z'); }
+  function thDate(s) { var p = String(s).slice(0, 10).split('-').map(Number); return p[2] + ' ' + TH_M[p[1] - 1] + ' ' + (p[0] + 543); }
+  function thShort(d) { return d.getUTCDate() + ' ' + TH_M[d.getUTCMonth()]; }
+  var f2 = d3.format(',.2f'), f0 = d3.format(',.0f'), p1 = d3.format('.1%'), p2 = d3.format('.2%'), pc0 = d3.format('.0%');
+  function baht0(v) { return '฿' + f0(v); }
+  function sgn(v, fmt) { return (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v)); }
+  function sgnBaht(v) { return (v > 0 ? '+' : v < 0 ? '−' : '') + '฿' + f0(Math.abs(v)); }
+  function tone(v) { return v > 0 ? 'up' : v < 0 ? 'down' : ''; }
+
+  var NAV = (D.nav || []).map(function (r) { r.d = parse(r.date); return r; });
+  var L = NAV[NAV.length - 1], F = NAV[0], P = NAV.length > 1 ? NAV[NAV.length - 2] : null;
+  var HWM = D.hwm;
+  var BY = {}; (D.holders || []).forEach(function (h) { BY[h.holder] = h; });
+  var TX = D.tx || [];
+  var IN_TYPES = { 'ยอดตั้งต้น': 1, 'ใส่เงิน': 1, 'รับโอนหน่วย (ผู้ซื้อ)': 1 };
+  var OUT_TYPES = { 'ถอนเงิน': 1, 'ถอนเงินฉุกเฉิน': 1, 'ปันผลรับเงิน': 1, 'โอนหน่วยออก (ผู้ขาย)': 1 };
+  function netIn(who) { var s = 0; TX.forEach(function (t) { if (t.who !== who) return; if (IN_TYPES[t.type]) s += t.amount; else if (OUT_TYPES[t.type]) s -= t.amount; }); return s; }
+  function unitsAt(who, date) { var s = 0; TX.forEach(function (t) { if (t.who === who && t.date <= date) s += t.units; }); return s; }
+  function nextWindow() {
+    var t = new Date(), mo = t.getMonth();
+    if ([0, 3, 6, 9].indexOf(mo) >= 0 && t.getDate() <= 7) return { open: true, start: new Date(t.getFullYear(), mo, 1) };
+    return { open: false, start: new Date(t.getFullYear(), Math.floor(mo / 3) * 3 + 3, 1) };
+  }
+  function thLocal(d) { return d.getDate() + ' ' + TH_M[d.getMonth()] + ' ' + (d.getFullYear() + 543); }
+
+  if (L) {
+    var asof = $('asof'); asof.textContent = ''; asof.appendChild(el('i')); asof.appendChild(document.createTextNode('ปิดวัน ' + thDate(L.date)));
+    $('r-asof').textContent = 'ข้อมูล ณ ปิดวัน ' + thDate(L.date) + ' · อัปเดต ' + String(D.generated || '').slice(11) + ' น.';
+  }
+
+  /* ---------- line chart: smooth gold line with glow, soft fill, HWM dashed ---------- */
+  function lineChart(box, rows, opt) {
+    box.innerHTML = '';
+    if (!rows.length) { box.appendChild(el('div', 'note', 'ยังไม่มีข้อมูล')); return; }
+    var W = Math.max(260, box.clientWidth), H = opt.h || 150, top = 12, bot = 24, padX = 18;
+    var svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img').attr('aria-label', opt.label);
+    var vals = rows.map(function (r) { return r.v; }); if (opt.ref != null) vals.push(opt.ref);
+    var lo = d3.min(vals), hi = d3.max(vals), pad = Math.max((hi - lo) * 0.12, Math.abs(hi) * 0.003);
+    var y = d3.scaleLinear([lo - pad, hi + pad], [H - bot, top]);
+    var x = rows.length > 1 ? d3.scaleUtc(d3.extent(rows, function (r) { return r.d; }), [padX, W - padX]) : d3.scaleUtc([d3.utcDay.offset(rows[0].d, -1), d3.utcDay.offset(rows[0].d, 1)], [padX, W - padX]);
+    // Up to 4 date labels taken from the data itself, evenly spaced, so they never crowd
+    var nt = Math.min(4, rows.length), xt = [];
+    for (var k = 0; k < nt; k++) xt.push(rows[nt === 1 ? 0 : Math.round(k * (rows.length - 1) / (nt - 1))].d);
+    svg.append('g').selectAll('text').data(xt).join('text').attr('x', x).attr('y', H - 5).attr('font-size', 11.5).attr('fill', MUTED)
+      .attr('font-family', 'Sarabun, sans-serif').attr('text-anchor', function (d, i) { return xt.length === 1 ? 'middle' : i === 0 ? 'start' : i === xt.length - 1 ? 'end' : 'middle'; }).text(thShort);
+    if (opt.ref != null) svg.append('line').attr('x1', 0).attr('x2', W).attr('y1', y(opt.ref)).attr('y2', y(opt.ref)).attr('stroke', HWMC).attr('stroke-dasharray', '2 5');
+    var id = Math.random().toString(36).slice(2, 7), defs = svg.append('defs');
+    var fill = defs.append('linearGradient').attr('id', 'f' + id).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+    fill.append('stop').attr('offset', 0).attr('stop-color', GOLD).attr('stop-opacity', .36);
+    fill.append('stop').attr('offset', .7).attr('stop-color', GOLD).attr('stop-opacity', .05);
+    fill.append('stop').attr('offset', 1).attr('stop-color', GOLD).attr('stop-opacity', 0);
+    var stroke = defs.append('linearGradient').attr('id', 's' + id).attr('x1', 0).attr('x2', 1).attr('y1', 0).attr('y2', 0);
+    stroke.append('stop').attr('offset', 0).attr('stop-color', GOLD_LO);
+    stroke.append('stop').attr('offset', 1).attr('stop-color', GOLD_HI);
+    var curve = d3.curveMonotoneX;
+    if (rows.length > 1) {
+      svg.append('path').datum(rows).attr('fill', 'url(#f' + id + ')').attr('d', d3.area().curve(curve).x(function (r) { return x(r.d); }).y0(H - bot).y1(function (r) { return y(r.v); }));
+      var line = svg.append('path').datum(rows).attr('fill', 'none').attr('stroke', 'url(#s' + id + ')').attr('stroke-width', 2.6).attr('stroke-linecap', 'round')
+        .style('filter', 'drop-shadow(0 0 8px rgba(212,176,106,.55))').attr('d', d3.line().curve(curve).x(function (r) { return x(r.d); }).y(function (r) { return y(r.v); }));
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var len = line.node().getTotalLength();
+        line.attr('stroke-dasharray', len + ' ' + len).attr('stroke-dashoffset', len).transition().duration(900).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
+      }
+    }
+    var E = rows[rows.length - 1];
+    svg.append('circle').attr('cx', x(E.d)).attr('cy', y(E.v)).attr('r', 9).attr('fill', GOLD).attr('fill-opacity', .16);
+    svg.append('circle').attr('cx', x(E.d)).attr('cy', y(E.v)).attr('r', 4).attr('fill', GOLD_HI).attr('stroke', '#0d0d0f').attr('stroke-width', 1.5);
+    var tip = el('div', 'tip'); tip.hidden = true; box.appendChild(tip);
+    var rule = svg.append('line').attr('y1', top).attr('y2', H - bot).attr('stroke', GOLD).attr('stroke-opacity', .4).style('display', 'none');
+    var dot = svg.append('circle').attr('r', 4.5).attr('fill', GOLD_HI).attr('stroke', '#0d0d0f').attr('stroke-width', 2).style('display', 'none');
+    var bis = d3.bisector(function (r) { return r.d; }).center;
+    function move(ev) {
+      var r = rows[bis(rows, x.invert(d3.pointer(ev, svg.node())[0]))], cx = x(r.d), cy = y(r.v);
+      rule.style('display', null).attr('x1', cx).attr('x2', cx); dot.style('display', null).attr('cx', cx).attr('cy', cy);
+      tip.innerHTML = ''; tip.appendChild(el('div', 'd', thDate(r.date))); tip.appendChild(el('div', 'num', opt.fmt(r))); tip.hidden = false;
+      var bw = box.clientWidth, tw = tip.offsetWidth; tip.style.left = Math.min(Math.max(8, cx / W * bw - tw / 2), bw - tw - 8) + 'px';
+      tip.style.top = Math.max(0, cy / H * box.clientHeight - 58) + 'px';
+    }
+    function hide() { tip.hidden = true; dot.style('display', 'none'); rule.style('display', 'none'); }
+    svg.append('rect').attr('width', W).attr('height', H).attr('fill', 'transparent').on('pointermove', move).on('pointerdown', move).on('pointerleave', hide);
+  }
+
+  /* ---------- ภาพรวม ---------- */
+  var range = 0;
+  function drawHomeChart() {
+    if (!L) return;
+    var rows = NAV;
+    if (range > 0) { var cut = d3.utcDay.offset(L.d, -range); rows = NAV.filter(function (r) { return r.d >= cut; }); }
+    lineChart($('c-nav'), rows.map(function (r) { return { d: r.d, date: r.date, v: r.nav, total: r.total }; }), {
+      h: 280, ref: HWM, label: 'กราฟ NAV ต่อหน่วยรายวัน', fmt: function (r) { return 'NAV ' + r.v.toFixed(4) + ' · ' + baht0(r.total); } });
+    $('c-nav-cap').textContent = HWM != null ? 'เส้นประ = HWM ' + HWM.toFixed(2) : 'NAV ต่อหน่วยรายวัน';
+  }
+  function chip(v, label) {
+    var c = el('span', 'chip ' + tone(v)); c.appendChild(el('b', tone(v), sgn(v, p2))); c.appendChild(document.createTextNode(label)); return c;
+  }
+  function buildHome() {
+    if (!L) { $('h-total').textContent = 'ยังไม่มีข้อมูล'; return; }
+    var parts = f2(L.total).split('.');
+    var ht = $('h-total'); ht.textContent = ''; ht.appendChild(el('span', 'cur', '฿')); ht.appendChild(document.createTextNode(parts[0])); ht.appendChild(el('small', null, '.' + parts[1]));
+    var c = $('h-chg'); c.innerHTML = '';
+    c.appendChild(chip(L.nav / F.nav - 1, 'ตั้งแต่เริ่ม'));
+    if (P) c.appendChild(chip(L.nav / P.nav - 1, 'วันล่าสุด'));
+    $('k-nav').textContent = L.nav.toFixed(4);
+    $('k-units').textContent = f0(L.units);
+    $('k-hwm').textContent = HWM != null ? HWM.toFixed(4) : '—';
+
+    var hb = $('h-holders'); hb.innerHTML = '';
+    ['พี่', 'น้อง'].forEach(function (who) {
+      var h = BY[who]; if (!h) return;
+      var base = netIn(who), gain = h.value - base;
+      var bud = D.budget ? D.budget[who === 'พี่' ? 'p' : 'n'] : null;
+      var row = el('button', 'glass row'); row.type = 'button'; row.setAttribute('aria-label', 'ดูรายละเอียดของ ' + nm(who));
+      row.appendChild(el('span', 'avatar', nm(who)));
+      var l = el('div', 'l');
+      var nmEl = el('div', 'nm', nm(who)); nmEl.appendChild(el('span', null, (who === 'พี่' ? 'ผู้จัดการ · ' : '') + pc0(h.share)));
+      l.appendChild(nmEl);
+      l.appendChild(el('div', 'sub', f2(h.units) + ' หน่วย'));
+      if (bud) l.appendChild(el('div', 'sub', 'ถอนได้ปีนี้ ' + baht0(bud.remain)));
+      var r = el('div', 'r');
+      r.appendChild(el('div', 'val', baht0(h.value)));
+      r.appendChild(el('div', 'g ' + tone(gain), sgnBaht(gain) + ' · ' + sgn(base ? gain / base : 0, p2)));
+      var bar = el('div', 'share'), fillb = el('i'); fillb.style.width = (h.share * 100) + '%'; bar.appendChild(fillb);
+      row.appendChild(l); row.appendChild(r); row.appendChild(bar);
+      row.addEventListener('click', function () { who_ = who; show('mine'); });
+      hb.appendChild(row);
+    });
+
+    var al = $('a-list'); al.innerHTML = '';
+    [{ n: 'บิตคอยน์', v: L.btc, t: .65 }, { n: 'ยืดหยุ่น', v: L.flex, t: .30 }, { n: 'เงินสด', v: L.cash, t: .05 }].forEach(function (it, i) {
+      var p = it.v / L.total, d = el('div'), h = el('div', 'al-h');
+      var n = el('span', 'n'); var sq = el('span', 'sw'); sq.style.background = SW[i]; n.appendChild(sq); n.appendChild(document.createTextNode(it.n));
+      var pv = el('span', 'p', p1(p)); pv.appendChild(el('span', 't', 'เป้า ' + pc0(it.t)));
+      h.appendChild(n); h.appendChild(pv); d.appendChild(h);
+      var tr = el('div', 'track'), f = el('i'), mk = el('b');
+      f.style.width = Math.min(100, p * 100) + '%';
+      f.style.background = i === 0 ? 'linear-gradient(90deg, #a8884f, ' + GOLD_HI + ')' : i === 1 ? 'linear-gradient(90deg, #6e5c3a, #a88c5a)' : 'linear-gradient(90deg, #4a463f, #7a7368)';
+      mk.style.left = (it.t * 100) + '%'; mk.title = 'เป้า ' + pc0(it.t);
+      tr.appendChild(f); tr.appendChild(mk); d.appendChild(tr); al.appendChild(d);
+    });
+  }
+  document.querySelectorAll('.range button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      range = Number(b.getAttribute('data-days'));
+      document.querySelectorAll('.range button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      drawHomeChart();
+    });
+  });
+
+  /* ---------- ของฉัน ---------- */
+  var who_ = 'น้อง';
+  function kvRow(box, k, v, cls) { var r = el('div'); r.appendChild(el('span', null, k)); r.appendChild(el('span', cls == null ? 'num' : cls, v)); box.appendChild(r); }
+  function buildMine() {
+    document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-who') === who_)); });
+    ['m-who1', 'm-who2', 'm-who3'].forEach(function (id) { $(id).textContent = nm(who_); });
+    var h = BY[who_]; if (!h || !L) return;
+    var rows = NAV.map(function (r) { return { d: r.d, date: r.date, v: unitsAt(who_, r.date) * r.nav }; }).filter(function (r) { return r.v > 0; });
+    $('m-range').textContent = rows.length ? thShort(rows[0].d) + ' – ' + thShort(rows[rows.length - 1].d) : '';
+    lineChart($('c-mine'), rows, { h: 230, label: 'มูลค่าของ ' + nm(who_) + ' รายวัน', fmt: function (r) { return baht0(r.v); } });
+    $('m-in').textContent = baht0(netIn(who_));
+    $('m-core').textContent = f2(h.core);
+    $('m-exc').textContent = f2(h.excess);
+
+    var w = nextWindow(), notify = new Date(w.start.getTime() - 30 * 864e5);
+    if (w.open) { $('m-win').textContent = 'หน้าต่างถอนเปิดอยู่ถึง 7 ' + TH_M[w.start.getMonth()]; $('m-win-sub').textContent = 'ถอนจากกองกลางต้องแจ้งล่วงหน้า 30 วัน · ถอนฉุกเฉินแจ้งล่วงหน้า 7 วัน ถอนได้ทุกเวลา'; }
+    else { $('m-win').textContent = 'ถอนรอบถัดไป 1–7 ' + TH_M[w.start.getMonth()] + ' ' + (w.start.getFullYear() + 543); $('m-win-sub').textContent = 'ถ้าจะถอนจากกองกลาง แจ้งภายใน ' + thLocal(notify) + ' · ถอนฉุกเฉินแจ้งล่วงหน้า 7 วัน ถอนได้ทุกเวลา'; }
+
+    var gainU = HWM != null ? Math.max(0, L.nav - HWM) : 0;
+    var nUnits = BY['น้อง'] ? BY['น้อง'].units : 0;
+    var fee = 0.1 * gainU * nUnits;
+    if (who_ === 'น้อง') { $('m-fee').textContent = 'ค่าบริหารถ้าปิดปีวันนี้ ≈ ' + baht0(fee); $('m-fee-sub').textContent = '10% ของกำไรส่วนที่ NAV เกิน HWM ' + (HWM != null ? HWM.toFixed(2) : '') + ' จ่ายเป็นหน่วยให้ C คิดจริงวันที่ 31 ธ.ค.'; }
+    else { $('m-fee').textContent = 'ค่าบริหารที่จะได้รับถ้าปิดปีวันนี้ ≈ ' + baht0(fee); $('m-fee-sub').textContent = 'รับเป็นหน่วยจาก N 10% ของกำไร N ส่วนที่เกิน HWM คิดจริงวันที่ 31 ธ.ค.'; }
+    var profit = gainU * L.units, divT = profit > 0 ? Math.min(0.2 * profit, 0.05 * L.total) : 0;
+    $('m-div').textContent = 'ปันผลส่วนของ ' + nm(who_) + ' ถ้าปิดปีวันนี้ ≈ ' + baht0(divT * h.units / L.units);
+
+    var k = who_ === 'พี่' ? 'p' : 'n', B = D.budget ? D.budget[k] : null, box = $('m-budget'); box.innerHTML = '';
+    if (B) {
+      kvRow(box, 'งบ 5% ของกองกลางต้นปี', f2(B.budget));
+      kvRow(box, 'ใช้งบไปแล้ว', f2(B.used));
+      kvRow(box, 'ส่วนเกิน ถอนได้โดยไม่ใช้งบ', f2(B.excess));
+      kvRow(box, 'ยังถอนได้โดยไม่เสียค่าปรับ', f2(B.remain), 'num em');
+      kvRow(box, 'ค่าปรับที่หักแล้วปีนี้', f2(B.penalty));
+      kvRow(box, 'ถอนฉุกเฉินเกินงบ ยกไปปีหน้า', f2(B.carry));
+    }
+    var hold = $('m-hold'); hold.textContent = D.budget ? D.budget.hold : '';
+    hold.className = 'pill ' + (D.budget && D.budget.hold === 'ถอนได้ตามงบ' ? 'up' : 'down');
+
+    var tb = $('m-tx'); tb.innerHTML = '';
+    TX.filter(function (t) { return t.who === who_; }).slice().reverse().forEach(function (t) {
+      var r = el('div'), a = el('div'), b = el('div', 'r');
+      a.appendChild(el('div', 'a', t.type)); a.appendChild(el('div', 'b', thDate(t.date) + ' · NAV ' + t.nav.toFixed(4)));
+      b.appendChild(el('div', 'a num', baht0(t.amount))); b.appendChild(el('div', 'b num', (t.units > 0 ? '+' : '') + f2(t.units) + ' หน่วย'));
+      r.appendChild(a); r.appendChild(b); tb.appendChild(r);
+    });
+    if (!tb.children.length) tb.appendChild(el('p', 'note', 'ยังไม่มีรายการ'));
+  }
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () { who_ = b.getAttribute('data-who'); buildMine(); });
+  });
+
+  /* ---------- รายงานกองทุน ---------- */
+  function navAtOrBefore(d) { var r = null; NAV.forEach(function (x) { if (x.d <= d) r = x; }); return r; }
+  function table(box, head, rows, foot) {
+    box.innerHTML = '';
+    var th = el('thead'), hr = el('tr'); head.forEach(function (h) { hr.appendChild(el('th', null, h)); }); th.appendChild(hr); box.appendChild(th);
+    var tb = el('tbody'); rows.forEach(function (cells) { var tr = el('tr'); cells.forEach(function (c) { tr.appendChild(typeof c === 'string' ? el('td', null, c) : c); }); tb.appendChild(tr); }); box.appendChild(tb);
+    if (foot) { var tf = el('tfoot'), fr = el('tr'); foot.forEach(function (c) { fr.appendChild(el('td', null, c)); }); tf.appendChild(fr); box.appendChild(tf); }
+  }
+  function buildReport() {
+    if (!L) return;
+    var perf = $('r-perf'); perf.innerHTML = '';
+    [['1 วัน', 1], ['1 สัปดาห์', 7], ['1 เดือน', 30], ['3 เดือน', 91], ['ตั้งแต่ต้นปี', 'ytd'], ['ตั้งแต่จัดตั้ง', 'inc']].forEach(function (p) {
+      var base = null;
+      if (p[1] === 'inc') base = F;
+      else if (p[1] === 'ytd') { base = navAtOrBefore(new Date(Date.UTC(L.d.getUTCFullYear() - 1, 11, 31))) || F; }
+      else { var b = navAtOrBefore(d3.utcDay.offset(L.d, -p[1])); base = (b && (L.d - F.d) / 864e5 >= p[1]) ? b : null; }
+      var c = el('div'); c.appendChild(el('span', 'k', p[0]));
+      if (base) { var v = L.nav / base.nav - 1; c.appendChild(el('span', 'v ' + tone(v), sgn(v, p2))); }
+      else c.appendChild(el('span', 'v muted', '—'));
+      perf.appendChild(c);
+    });
+    var peak = 0, mdd = 0, hi = F, lo = F;
+    NAV.forEach(function (r) { if (r.nav > peak) peak = r.nav; mdd = Math.min(mdd, r.nav / peak - 1); if (r.nav > hi.nav) hi = r; if (r.nav < lo.nav) lo = r; });
+    var rk = $('r-risk'); rk.innerHTML = '';
+    kvRow(rk, 'NAV สูงสุด', hi.nav.toFixed(4) + ' · ' + thShort(hi.d));
+    kvRow(rk, 'NAV ต่ำสุด', lo.nav.toFixed(4) + ' · ' + thShort(lo.d));
+    kvRow(rk, 'ลดลงจากจุดสูงสุดมากสุด', sgn(mdd, p2), 'num ' + tone(mdd));
+
+    var fa = $('r-facts'); fa.innerHTML = '';
+    kvRow(fa, 'วันเริ่มกองทุน', thDate(F.date), '');
+    kvRow(fa, 'ทรัพย์สินสุทธิ (บาท)', f2(L.total));
+    kvRow(fa, 'NAV เริ่มต้น / HWM', F.nav.toFixed(4) + ' / ' + (HWM != null ? HWM.toFixed(4) : '—'));
+    kvRow(fa, 'ค่าบริหาร', '10% ของกำไรเหนือ HWM', '');
+    kvRow(fa, 'ปันผล', '20% ของกำไร ไม่เกิน 5% ของพอร์ต', '');
+    kvRow(fa, 'ค่าใช้จ่ายพอร์ตปีนี้ (บาท)', f2(D.costs || 0));
+    kvRow(fa, 'บันทึก NAV', '07:00 น. ทุกวัน', '');
+    kvRow(fa, 'ราคาซื้อขายหน่วย', 'NAV ปิดวันก่อนหน้า', '');
+
+    var gapSum = 0;
+    var arows = (D.buckets || []).map(function (b, i) {
+      var n = el('td'), sq = el('span', 'sw'); sq.style.background = SW[i] || STEEL; n.appendChild(sq); n.appendChild(document.createTextNode(b.bucket.replace(/^\d+\.\s*/, '')));
+      gapSum += b.gap;
+      return [n, f0(b.value), p1(b.pct), pc0(b.target), b.gap > 0 ? f0(b.gap) : '—'];
+    });
+    table($('r-alloc'), ['กระเป๋า', 'มูลค่า', 'ตอนนี้', 'เป้า', 'ต้องเติม'], arows, ['รวม', f0(L.total), '100%', '100%', f0(gapSum)]);
+
+    var tc = 0, te = 0, tu = 0;
+    var hrows = ['พี่', 'น้อง'].filter(function (w) { return BY[w]; }).map(function (w) {
+      var h = BY[w]; tc += h.core; te += h.excess; tu += h.units;
+      return [nm(w), f2(h.core), f2(h.excess), f2(h.units), pc0(h.share)];
+    });
+    table($('r-hold'), ['', 'กองกลาง', 'ส่วนเกิน', 'รวม', 'สิทธิออกเสียง'], hrows, ['รวม', f2(tc), f2(te), f2(tu), '100%']);
+
+    var an = $('r-annual'); an.innerHTML = '';
+    if (!(D.annual || []).length) {
+      var s = el('div', 'glass info'), ic = el('span', 'ic');
+      ic.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4b06a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>';
+      var t = el('div'); t.appendChild(el('b', null, 'สรุปปีแรกขึ้นเช้า 1 ม.ค. ' + (L.d.getUTCFullYear() + 544)));
+      t.appendChild(el('span', null, 'หลังระบบบันทึก NAV วันที่ 31 ธ.ค. จะแสดง NAV สิ้นปี ค่าบริหาร ปันผล และ HWM ใหม่'));
+      s.appendChild(ic); s.appendChild(t); an.appendChild(s);
+    } else {
+      var w = el('div', 'glass tblw'), t3 = el('table', 'tbl');
+      table(t3, ['ปี', 'NAV สิ้นปี', 'ค่าบริหาร', 'ปันผลรวม', 'HWM ใหม่'], D.annual.map(function (a) {
+        return [String(Number(a.year) + 543), a.navEnd.toFixed(4), f0(a.fee), f0(a.divTotal), a.hwmNew.toFixed(4)];
+      }));
+      w.appendChild(t3); an.appendChild(w);
+    }
+  }
+
+  /* ---------- navigation ---------- */
+  var current = 'home';
+  function show(v) {
+    current = v;
+    ['home', 'mine', 'report'].forEach(function (k) { $('v-' + k).hidden = k !== v; });
+    document.querySelectorAll('.tab').forEach(function (t) { if (t.getAttribute('data-view') === v) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
+    window.scrollTo(0, 0);
+    if (v === 'home') drawHomeChart();
+    if (v === 'mine') buildMine();
+    if (v === 'report') buildReport();
+  }
+  document.querySelectorAll('.tab').forEach(function (t) { t.addEventListener('click', function () { show(t.getAttribute('data-view')); }); });
+  document.querySelectorAll('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-goto')); }); });
+
+  buildHome();
+  show('home');
+  var rt, lastW = window.innerWidth;
+  window.addEventListener('resize', function () { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rt); rt = setTimeout(function () { show(current); }, 150); });
+})();
+</script>
+</body>
+</html>
